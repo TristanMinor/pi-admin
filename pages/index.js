@@ -1,33 +1,33 @@
 import Link from 'next/link'
+import Systems from '../components/Systems.js'
+import System from '../components/System.js'
 
 const Index = (props) => (
   <div>
-    <select size="20">
-        <Link as={`/system/_yxf8pjwlhx9`} href={`/system?id=_yxf8pjwlhx9`}>
-          <option>{props.systems._yxf8pjwlhx9.name}</option>
-        </Link>
-        <Link as={`/system/_ggghpez789b`} href={`/system?id=_ggghpez789b`}>
-          <option>{props.systems._ggghpez789b.name}</option>
-        </Link>
-    </select>
-    <style jsx>{`
-      select {
-        height: 95vh;
-        width: 100px;
-      }
-    `}</style>
+    <Systems systems={props.systems} />
   </div>
 )
 
 Index.getInitialProps = async function () {
 
-  let data = await import('../src/systems.json')
-  console.log(data);
+  const objectOfSystems = await import('../src/systems.json')
+  const arrayOfSystems = []
+
+  // Minus 1 becasue there is some weird redundant object at the end
+  for (var i = 0; i < Object.keys(objectOfSystems).length - 1; i++) {
+    arrayOfSystems[i] = {
+      system: {
+        name: Object.values(objectOfSystems)[i].name,
+        id: Object.keys(objectOfSystems)[i]
+      }
+    }
+  }
+
+  console.log(arrayOfSystems)
 
   return {
-    systems: data
+    systems: arrayOfSystems
   }
 }
-
 
 export default Index
